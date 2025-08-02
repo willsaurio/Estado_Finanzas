@@ -52,4 +52,79 @@
         {% endfor %}
     </tbody>
 </table>
+
+<h3 class="mt-5">Graficas</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="graficoBarras"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="graficoPastel"></canvas>
+            </div>
+        </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const fechas = {{ fechas|tojson }};
+  const datosIngresos = {{ datos_ingresos|tojson }};
+  const datosGastos = {{ datos_gastos|tojson }};
+  const totalIngresos = {{ ingresos }};
+  const totalGastos = {{ gastos }};
+
+  const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+  new Chart(ctxBarras, {
+    type: 'bar',
+    data: {
+      labels: fechas,
+      datasets: [
+        {
+          label: 'Ingresos',
+          data: datosIngresos,
+          backgroundColor: 'rgba(40, 167, 69, 0.6)',
+          borderColor: 'rgba(40, 167, 69, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Gastos',
+          data: datosGastos,
+          backgroundColor: 'rgba(220, 53, 69, 0.6)',
+          borderColor: 'rgba(220, 53, 69, 1)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Ingresos vs Gastos por Día'
+        }
+      }
+    }
+  });
+
+  const ctxPastel = document.getElementById('graficoPastel').getContext('2d');
+  new Chart(ctxPastel, {
+    type: 'doughnut',
+    data: {
+      labels: ['Ingresos', 'Gastos'],
+      datasets: [{
+        data: [totalIngresos, totalGastos],
+        backgroundColor: ['#28a745', '#dc3545']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Proporción Total Ingresos / Gastos'
+        }
+      }
+    }
+  });
+</script>
+
+
 {% endblock %}

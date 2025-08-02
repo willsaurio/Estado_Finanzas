@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import json
 import os
 from datetime import datetime
+from collections import defaultdict
 
 app = Flask(__name__)
 
@@ -16,8 +17,7 @@ def cargar_datos():
 def guardar_datos(data):
     with open(ARCHIVO_DATOS, "w") as f:
         json.dump(data, f, indent=4)
-        
-        
+
 @app.route('/')
 def index():
     datos = cargar_datos()
@@ -25,22 +25,33 @@ def index():
     ingresos = sum(m["monto"] for m in movimientos if m["tipo"] == "ingreso")
     gastos = sum(m["monto"] for m in movimientos if m["tipo"] == "gasto")
     saldo = ingresos - gastos
-    return render_template("index.html", movimientos=movimientos, saldo=saldo, ingresos=ingresos, gastos=gastos)
+
+    resumen = defaultdict(lambda: {"ingreso": 0, "gasto": 0})
+    for mov in movimientos:
+        if "fecha" in mov and mov["fecha"]:
+            fecha = mov["fecha"][:10]
+            resumen[fecha][mov["tipo"]] += mov["monto"]
+
+    fechas = sorted(resumen.keys())
+    datos_ingresos = [resumen[f]["ingreso"] for f in fechas]
+    datos_gastos = [resumen[f]["gasto"] for f in fechas]
+
+    return render_template("index.html", movimientos=movimientos, saldo=saldo, ingresos=ingresos, gastos=gastos, fechas=fechas, datos_ingresos=datos_ingresos, datos_gastos=datos_gastos)
 
 @app.route('/agregar', methods=['POST'])
 def agregar():
     tipo = request.form["tipo"]
     monto = float(request.form["monto"])
     descripcion = request.form["descripcion"]
-    fecha = datetime.now().strftime("%Y-$M-%d %H:%M:%S")
-    
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     nuevo = {
         "tipo": tipo,
-        "monto":monto,
+        "monto": monto,
         "descripcion": descripcion,
         "fecha": fecha
     }
-    
+
     datos = cargar_datos()
     datos["movimientos"].append(nuevo)
     guardar_datos(datos)

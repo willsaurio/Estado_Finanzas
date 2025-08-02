@@ -1,3 +1,46 @@
 {
-    "movimientos": []
+    "movimientos": [
+        {
+            "tipo": "gasto",
+            "monto": 165.0,
+            "descripcion": "cervezas",
+            "fecha": "2025-08-01 22:48:52"
+        },
+        {
+            "tipo": "gasto",
+            "monto": 65.0,
+            "descripcion": "cerveza",
+            "fecha": "2025-08-01 22:49:05"
+        },
+        {
+            "tipo": "gasto",
+            "monto": 1099.83,
+            "descripcion": "Internet",
+            "fecha": "2025-08-01 22:49:34"
+        },
+        {
+            "tipo": "gasto",
+            "monto": 213.0,
+            "descripcion": "comida de pedidos ya",
+            "fecha": "2025-08-01 22:50:13"
+        },
+        {
+            "tipo": "ingreso",
+            "monto": 7126.12,
+            "descripcion": "pago del mes",
+            "fecha": "2025-08-01 22:50:33"
+        },
+        {
+            "tipo": "gasto",
+            "monto": 54.94,
+            "descripcion": "fraude de no se que",
+            "fecha": "2025-08-01 22:50:56"
+        },
+        {
+            "tipo": "gasto",
+            "monto": 600.0,
+            "descripcion": "don Ceviche",
+            "fecha": "2025-08-01 22:51:32"
+        }
+    ]
 }
