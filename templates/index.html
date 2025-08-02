@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="card p-4 mb-4">
+    <form action="/agregar" method="POST" class="row g-3">
+        <div class="col-md-2">
+            <input type="number" step="0.01" name="monto" class="form-control" placeholder="Monto" required>
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="descripcion" class="form-control" placeholder="Descripción" required>
+        </div>
+        <div class="col-md-2">
+            <select name="tipo" class="form-select" required>
+                <option value="ingreso">Ingreso</option>
+                <option value="gasto">Gasto</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">Registrar</button>
+        </div>
+    </form>
+</div>
+
+<h3>Saldo actual: 
+    <span class="badge bg-{{ 'success' if saldo >= 0 else 'danger' }}">
+        ${{ "%.2f"|format(saldo) }}
+    </span>
+</h3>
+<p><strong>Total ingresos:</strong> ${{ "%.2f"|format(ingresos) }} | <strong>Total gastos:</strong> ${{ "%.2f"|format(gastos) }}</p>
+
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Monto</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in movimientos %}
+        <tr>
+            <td>{{ m.fecha }}</td>
+            <td>{{ m.tipo.capitalize() }}</td>
+            <td>${{ "%.2f"|format(m.monto) }}</td>
+            <td>{{ m.descripcion }}</td>
+        </tr>
+        <td>
+            <a href="{{ url_for('editar', id=loop.index0) }}" class="btn btn-sm btn-warning">Editar</a>
+            <a href="{{ url_for('eliminar', id=loop.index0) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este movimiento?')">Eliminar</a>
+        </td>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

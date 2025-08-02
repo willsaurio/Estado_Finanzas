@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h3>Editar Movimiento</h3>
+<form method="POST">
+    <div class="mb-3">
+        <label>Monto</label>
+        <input type="number" step="0.01" name="monto" class="form-control" value="{{ movimiento.monto }}" required>
+    </div>
+    <div class="mb-3">
+        <label>Descripción</label>
+        <input type="text" name="descripcion" class="form-control" value="{{ movimiento.descripcion }}" required>
+    </div>
+    <div class="mb-3">
+        <label>Tipo</label>
+        <select name="tipo" class="form-select" required>
+            <option value="ingreso" {% if movimiento.tipo == 'ingreso' %}selected{% endif %}>Ingreso</option>
+            <option value="gasto" {% if movimiento.tipo == 'gasto' %}selected{% endif %}>Gasto</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar cambios</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
